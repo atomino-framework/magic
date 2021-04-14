@@ -1,0 +1,15 @@
+{
+    "name": "atomino/magic",
+    "authors": [
+        {
+            "name": "laborci",
+            "email": "gergely@laborci.hu"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Atomino\\Molecules\\Magic\\": "src/"
+        }
+    }
+}
