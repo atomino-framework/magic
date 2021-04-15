@@ -21,6 +21,9 @@ abstract class MagicApi extends Api {
 		else return new ($this->getEntity())();
 	}
 
+	protected function preprocess($data){return $data;}
+	protected function postprocess(Entity $item, $data){}
+
 	#[Route(Api::POST, '/list/:page([0-9]+)')]
 	#[Auth]
 	public function list($page) {
@@ -81,8 +84,10 @@ abstract class MagicApi extends Api {
 	}
 
 	protected function save($item, $data) {
+		$data = $this->preprocess($data);
 		try {
 			$item->import($data);
+			$this->postprocess($item, $data);
 			$item->save();
 		} catch (ValidationError $e) {
 			$this->getResponse()->setStatusCode(422);
