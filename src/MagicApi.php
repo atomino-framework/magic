@@ -1,9 +1,11 @@
 <?php namespace Atomino\Molecules\Magic;
 
+use Application\Entity\Article;
 use Atomino\Database\Finder\Filter;
 use Atomino\Entity\Entity;
 use Atomino\Entity\ValidationError;
 use Atomino\Molecules\EntityPlugin\Attachmentable\Attachmentable;
+use Atomino\Molecules\Magic\Attributes\Magic;
 use Atomino\Molecules\Module\Attachment\Img\Img;
 use Atomino\Molecules\Module\Authenticator\SessionAuthenticator;
 use Atomino\RequestPipeline\Responder\Api\Api;
@@ -12,17 +14,20 @@ use Atomino\RequestPipeline\Responder\Api\Attributes\Route;
 
 abstract class MagicApi extends Api {
 
-	public function __construct(private SessionAuthenticator $authenticator) { }
-
-	abstract protected function getEntity(): string;
+	private string $entity;
+	public function __construct(private SessionAuthenticator $authenticator) {		$this->entity = Magic::get(new \ReflectionClass($this))->entity; }
+	private function getEntity(): string { return $this->entity; }
 
 	protected function getEntityObject($id = null): Entity {
 		if (!is_null($id)) return ($this->getEntity())::pick($id);
 		else return new ($this->getEntity())();
 	}
 
-	protected function preprocess($data){return $data;}
-	protected function postprocess(Entity $item, $data){}
+	protected function preprocess($data) { return $data; }
+	protected function postprocess(Entity $item, $data) { }
+	protected function getSort(string $sort): array { return []; }
+	protected function quickSearch(string $quickSearch): Filter { return Filter::where(($this->getEntity())::id($quickSearch)); }
+
 
 	#[Route(Api::POST, '/list/:page([0-9]+)')]
 	#[Auth]
@@ -51,7 +56,6 @@ abstract class MagicApi extends Api {
 			'items' => $items,
 		];
 	}
-	protected function getSort(string $sort): array { return []; }
 
 	#[Route(Api::GET, '/:id([0-9]+)')]
 	#[Auth]
@@ -137,7 +141,7 @@ abstract class MagicApi extends Api {
 			/** @var \Atomino\Molecules\Module\Attachment\AttachmentableInterface $entity */
 			$entity = $this->getEntityObject($id);
 			$entity->getAttachmentStorage()->collections[$this->post->get('collection')]->addFile($this->files->get('file'));
-		}catch (\Exception $e){
+		} catch (\Exception $e) {
 			$this->getResponse()->setStatusCode(499, $e->getMessage());
 			return;
 		}
@@ -180,12 +184,12 @@ abstract class MagicApi extends Api {
 			$entity = $this->getEntityObject($id);
 			$entity->getAttachmentStorage()->collections[$collection]->add($filename);
 
-			if(!is_null($from)){
+			if (!is_null($from)) {
 				$entity->getAttachmentStorage()->collections[$from]->remove($filename);
 			}
 
 			return true;
-		}catch (\Exception $e){
+		} catch (\Exception $e) {
 			$this->getResponse()->setStatusCode(499, $e->getMessage());
 			return;
 		}
@@ -208,6 +212,7 @@ abstract class MagicApi extends Api {
 		if (array_key_exists('properties', $data)) $file->setProperties($data['properties']);
 		if (array_key_exists('safezone', $data)) $file->setSafezone($data['safezone']);
 		if (array_key_exists('focus', $data)) $file->setFocus($data['focus']);
+		if (array_key_exists('quality', $data)) $file->setQuality($data['quality']);
 
 		$file->storage->commit();
 

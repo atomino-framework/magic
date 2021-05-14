@@ -1,0 +1,15 @@
+<?php namespace {{namespace}};
+
+use {{entity}};
+use Atomino\Database\Finder\Filter;
+use Atomino\Entity\Entity;
+use Atomino\Molecules\Magic\Attributes\Magic;
+use Atomino\Molecules\Magic\SelectorApi;
+
+#[Magic({{entity_name}}::class)]
+class {{entity_name}}MagicSelector extends SelectorApi {
+	/** @param {{entity_name}} $item */
+	protected function value(Entity $item): string { return $item->id; }
+	protected function filter(string $search): Filter { return Filter::where(User::id()->like('%' . $search . '%')); }
+	protected function order(): array { return ['id', 'asc']; }
+}
