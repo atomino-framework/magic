@@ -1,10 +1,10 @@
 <?php namespace {{namespace}};
 
-use Atomino\Molecules\Magic\Attributes\Magic;
-use Atomino\Entity\Entity;
+use Atomino\Magic\Attributes\Magic;
+use Atomino\CarbonEntity\Entity;
 use {{entity}};
-use Atomino\Molecules\Magic\MagicApi;
-use Atomino\Database\Finder\Filter;
+use Atomino\Magic\MagicApi;
+use Atomino\Carbon\Database\Finder\Filter;
 
 #[Magic({{entity_name}}::class)]
 class {{entity_name}}Magic extends MagicApi {

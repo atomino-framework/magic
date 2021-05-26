@@ -1,9 +1,9 @@
-<?php namespace Atomino\Molecules\Magic\Cli;
+<?php namespace Atomino\Magic\Cli;
 
 use Atomino\Cli\Attributes\Command;
 use Atomino\Cli\CliCommand;
 use Atomino\Cli\CliModule;
-use Atomino\Molecules\Magic\Generator;
+use Atomino\Magic\Generator;
 use Symfony\Component\Console\Input\InputArgument;
 
 class Magic extends CliModule{

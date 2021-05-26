@@ -1,16 +1,15 @@
-<?php namespace Atomino\Molecules\Magic;
+<?php namespace Atomino\Magic;
 
-use Application\Entity\Article;
-use Atomino\Database\Finder\Filter;
-use Atomino\Entity\Entity;
-use Atomino\Entity\ValidationError;
-use Atomino\Molecules\EntityPlugin\Attachmentable\Attachmentable;
-use Atomino\Molecules\Magic\Attributes\Magic;
-use Atomino\Molecules\Module\Attachment\Img\Img;
-use Atomino\Molecules\Module\Authenticator\SessionAuthenticator;
-use Atomino\RequestPipeline\Responder\Api\Api;
-use Atomino\RequestPipeline\Responder\Api\Attributes\Auth;
-use Atomino\RequestPipeline\Responder\Api\Attributes\Route;
+use Atomino\Carbon\Database\Finder\Filter;
+use Atomino\Carbon\Entity;
+use Atomino\Carbon\ValidationError;
+use Atomino\Carbon\Plugins\Attachment\Attachmentable;
+use Atomino\Magic\Attributes\Magic;
+use Atomino\Bundle\Attachment\Img\Img;
+use Atomino\Bundle\Authenticate\SessionAuthenticator;
+use Atomino\Mercury\Responder\Api\Api;
+use Atomino\Mercury\Responder\Api\Attributes\Auth;
+use Atomino\Mercury\Responder\Api\Attributes\Route;
 
 abstract class MagicApi extends Api {
 
@@ -112,7 +111,7 @@ abstract class MagicApi extends Api {
 	#[Route(Api::GET, '/attachments/:id([0-9]+)/:category')]
 	#[Auth]
 	public function getAttachments(int $id, string $category) {
-		/** @var \Atomino\Molecules\Module\Attachment\AttachmentableInterface $entity */
+		/** @var \Atomino\Bundle\Attachment\AttachmentableInterface $entity */
 		$entity = $this->getEntityObject($id);
 		$files = [];
 		foreach ($entity->getAttachmentStorage()->collections[$category] as $attachment) {
@@ -138,7 +137,7 @@ abstract class MagicApi extends Api {
 	#[Auth]
 	public function uploadAttachment($id) {
 		try {
-			/** @var \Atomino\Molecules\Module\Attachment\AttachmentableInterface $entity */
+			/** @var \Atomino\Bundle\Attachment\AttachmentableInterface $entity */
 			$entity = $this->getEntityObject($id);
 			$entity->getAttachmentStorage()->collections[$this->post->get('collection')]->addFile($this->files->get('file'));
 		} catch (\Exception $e) {
@@ -152,7 +151,7 @@ abstract class MagicApi extends Api {
 	public function deleteAttachment($id) {
 		$filename = $this->data->get('filename');
 		$collection = $this->data->get('collection');
-		/** @var \Atomino\Molecules\Module\Attachment\AttachmentableInterface $entity */
+		/** @var \Atomino\Bundle\Attachment\AttachmentableInterface $entity */
 		$entity = $this->getEntityObject($id);
 
 		$entity->getAttachmentStorage()->collections[$collection]->remove($filename);
@@ -166,7 +165,7 @@ abstract class MagicApi extends Api {
 		$filename = $this->data->get('filename');
 		$collection = $this->data->get('collection');
 		$index = $this->data->get('index');
-		/** @var \Atomino\Molecules\Module\Attachment\AttachmentableInterface $entity */
+		/** @var \Atomino\Bundle\Attachment\AttachmentableInterface $entity */
 		$entity = $this->getEntityObject($id);
 		$entity->getAttachmentStorage()->collections[$collection]->order($filename, $index);
 
@@ -180,7 +179,7 @@ abstract class MagicApi extends Api {
 			$filename = $this->data->get('filename');
 			$collection = $this->data->get('collection');
 			$from = $this->data->get('from');
-			/** @var \Atomino\Molecules\Module\Attachment\AttachmentableInterface $entity */
+			/** @var \Atomino\Bundle\Attachment\AttachmentableInterface $entity */
 			$entity = $this->getEntityObject($id);
 			$entity->getAttachmentStorage()->collections[$collection]->add($filename);
 
@@ -201,7 +200,7 @@ abstract class MagicApi extends Api {
 		$filename = $this->data->get('filename');
 		$data = $this->data->get('data');
 
-		/** @var \Atomino\Molecules\Module\Attachment\AttachmentableInterface $entity */
+		/** @var \Atomino\Bundle\Attachment\AttachmentableInterface $entity */
 		$entity = $this->getEntityObject($id);
 
 		$file = $entity->getAttachmentStorage()->getAttachment($filename);

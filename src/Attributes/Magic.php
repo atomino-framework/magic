@@ -1,4 +1,4 @@
-<?php namespace Atomino\Molecules\Magic\Attributes;
+<?php namespace Atomino\Magic\Attributes;
 
 use Atomino\Neutrons\Attr;
 use Attribute;

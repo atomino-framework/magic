@@ -9,7 +9,7 @@
     "require": {},
     "autoload": {
         "psr-4": {
-            "Atomino\\Molecules\\Magic\\": "src/"
+            "Atomino\\Magic\\": "src/"
         }
     }
 }

@@ -1,12 +1,12 @@
-<?php namespace Atomino\Molecules\Magic;
+<?php namespace Atomino\Magic;
 
-use Atomino\Database\Finder\Comparison;
-use Atomino\Database\Finder\Filter;
-use Atomino\Entity\Entity;
-use Atomino\Molecules\Magic\Attributes\Magic;
-use Atomino\RequestPipeline\Responder\Api\Api;
-use Atomino\RequestPipeline\Responder\Api\Attributes\Auth;
-use Atomino\RequestPipeline\Responder\Api\Attributes\Route;
+use Atomino\Carbon\Database\Finder\Comparison;
+use Atomino\Carbon\Database\Finder\Filter;
+use Atomino\Carbon\Entity;
+use Atomino\Magic\Attributes\Magic;
+use Atomino\Mercury\Responder\Api\Api;
+use Atomino\Mercury\Responder\Api\Attributes\Auth;
+use Atomino\Mercury\Responder\Api\Attributes\Route;
 
 
 abstract class SelectorApi extends Api {

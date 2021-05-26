@@ -1,11 +1,11 @@
-<?php namespace Atomino\Molecules\Magic;
+<?php namespace Atomino\Magic;
 
 use Atomino\Cli\Style;
-use Atomino\Entity\Entity;
-use Atomino\Entity\Field\EnumField;
-use Atomino\Entity\Field\SetField;
-use Atomino\Entity\Model;
-use Atomino\Molecules\EntityPlugin\Attachmentable\Attributes\AttachmentCollection;
+use Atomino\Carbon\Entity;
+use Atomino\Carbon\Field\EnumField;
+use Atomino\Carbon\Field\SetField;
+use Atomino\Carbon\Model;
+use Atomino\Carbon\Plugins\Attachment\AttachmentCollection;
 use Atomino\Neutrons\CodeFinder;
 use CaseHelper\CamelCaseHelper;
 use CaseHelper\PascalCaseHelper;
