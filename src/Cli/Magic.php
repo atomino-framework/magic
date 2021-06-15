@@ -1,14 +1,14 @@
 <?php namespace Atomino\Magic\Cli;
 
-use Atomino\Cli\Attributes\Command;
-use Atomino\Cli\CliCommand;
-use Atomino\Cli\CliModule;
+use Atomino\Core\Cli\Attributes\Command;
+use Atomino\Core\Cli\CliCommand;
+use Atomino\Core\Cli\CliModule;
 use Atomino\Magic\Generator;
 use Symfony\Component\Console\Input\InputArgument;
 
 class Magic extends CliModule{
 
-	#[Command('magic')]
+	#[Command('magic',description: "Creates magic ui config")]
 	public function entity():CliCommand{
 		return (new class() extends CliCommand{
 			protected function exec(mixed $config){

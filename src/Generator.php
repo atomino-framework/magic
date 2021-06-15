@@ -1,6 +1,6 @@
 <?php namespace Atomino\Magic;
 
-use Atomino\Cli\Style;
+use Atomino\Core\Cli\Style;
 use Atomino\Carbon\Entity;
 use Atomino\Carbon\Field\EnumField;
 use Atomino\Carbon\Field\SetField;
