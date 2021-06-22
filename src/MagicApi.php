@@ -1,5 +1,6 @@
 <?php namespace Atomino\Magic;
 
+use Atomino\Bundle\Authenticate\Authenticator;
 use Atomino\Carbon\Database\Finder\Filter;
 use Atomino\Carbon\Entity;
 use Atomino\Carbon\ValidationError;
@@ -14,7 +15,10 @@ use Atomino\Mercury\Responder\Api\Attributes\Route;
 abstract class MagicApi extends Api {
 
 	private string $entity;
-	public function __construct(private SessionAuthenticator $authenticator) {		$this->entity = Magic::get(new \ReflectionClass($this))->entity; }
+	public function __construct(private SessionAuthenticator $sessionAuthenticator, Authenticator $authenticator) {
+		parent::__construct($authenticator);
+		$this->entity = Magic::get(new \ReflectionClass($this))->entity;
+	}
 	private function getEntity(): string { return $this->entity; }
 
 	protected function getEntityObject($id = null): Entity {

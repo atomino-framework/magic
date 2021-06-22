@@ -1,26 +1,23 @@
 <?php namespace Atomino\Magic;
 
-use Atomino\Core\Cli\Style;
 use Atomino\Carbon\Entity;
 use Atomino\Carbon\Field\EnumField;
 use Atomino\Carbon\Field\SetField;
 use Atomino\Carbon\Model;
 use Atomino\Carbon\Plugins\Attachment\AttachmentCollection;
+use Atomino\Core\Cli\Style;
 use Atomino\Neutrons\CodeFinder;
-use CaseHelper\CamelCaseHelper;
 use CaseHelper\PascalCaseHelper;
-use Symfony\Component\Console\Style\StyleInterface;
-use function Atomino\dic;
 
 class Generator {
 	public function __construct(
 		protected string $entityNamespace,
 		protected string $apiNamespace,
 		protected string $descriptorPath,
-		protected Style $style) {
-		if (!is_dir($this->descriptorPath)) {
-			mkdir($this->descriptorPath);
-		}
+		protected Style $style,
+		protected CodeFinder $codeFinder
+	) {
+		if (!is_dir($this->descriptorPath)) mkdir($this->descriptorPath);
 	}
 
 	public function generate(string $entity) {
@@ -36,15 +33,15 @@ class Generator {
 		/** @var Model $model */
 		$model = ($entityClass)::model();
 
-		$codeFinder = dic()->get(CodeFinder::class);
+		$codeFinder = $this->codeFinder;
 		$file = $codeFinder->Psr4ResolveClass($this->apiNamespace . '\\' . $entity . 'Magic');
 
 		$file = (new PascalCaseHelper())->toKebabCase($entity . 'Model');
 		$files = [
-			'json' => $this->descriptorPath . $file . '.json',
-			'ts'   => $this->descriptorPath . $file . '.ts',
-			'api'  => $codeFinder->Psr4ResolveClass($this->apiNamespace . '\\' . $entity . 'Magic'),
-			'selector'  => $codeFinder->Psr4ResolveClass($this->apiNamespace . '\\' . $entity . 'MagicSelector'),
+			'json'     => $this->descriptorPath . $file . '.json',
+			'ts'       => $this->descriptorPath . $file . '.ts',
+			'api'      => $codeFinder->Psr4ResolveClass($this->apiNamespace . '\\' . $entity . 'Magic'),
+			'selector' => $codeFinder->Psr4ResolveClass($this->apiNamespace . '\\' . $entity . 'MagicSelector'),
 		];
 
 		$pd = json_decode(file_get_contents($files['json']), true);
@@ -64,7 +61,7 @@ class Generator {
 		foreach ($model->getFields() as $name => $field) {
 			$ref = new \ReflectionClass($field);
 			$descriptor['fields'][$name] = [
-				'field'     => $name,
+				'field'    => $name,
 				'label'    => isset($pd['fields'][$name]['label']) ? $pd['fields'][$name]['label'] : $name,
 				'type'     => $ref->getShortName(),
 				'readonly' => is_null($field->getSetter()) && $field->isProtected() ? true : false,
@@ -91,7 +88,6 @@ class Generator {
 			];
 		}
 		$this->style->_task_ok('done');
-
 
 
 		$this->style->_task('Create Magic Api PHP');
