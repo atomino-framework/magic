@@ -7,7 +7,7 @@ use Atomino\Core\Cli\CliModule;
 use Atomino\Core\Cli\Style;
 use Atomino\Core\Config\Config;
 use Atomino\Magic\Generator;
-use Atomino\Neutrons\CodeFinder;
+use Atomino\Neutrons\CodeFinderInterface;
 use DI\Container;
 use Symfony\Component\Console\Input\Input;
 use Symfony\Component\Console\Input\InputArgument;
@@ -15,7 +15,7 @@ use Symfony\Component\Console\Output\Output;
 
 class Magic extends CliModule {
 
-	public function __construct(private CodeFinder $codeFinder, private Config $config) { }
+	public function __construct(private CodeFinderInterface $codeFinder, private Config $config) { }
 
 	#[Command('magic', description: "Creates magic ui config")]
 	protected function entity(CliCommand $command) {

@@ -6,7 +6,7 @@ use Atomino\Carbon\Field\SetField;
 use Atomino\Carbon\Model;
 use Atomino\Carbon\Plugins\Attachment\AttachmentCollection;
 use Atomino\Core\Cli\Style;
-use Atomino\Neutrons\CodeFinder;
+use Atomino\Neutrons\CodeFinderInterface;
 use CaseHelper\PascalCaseHelper;
 
 class Generator {
@@ -15,7 +15,7 @@ class Generator {
 		protected string $apiNamespace,
 		protected string $descriptorPath,
 		protected Style $style,
-		protected CodeFinder $codeFinder
+		protected CodeFinderInterface $codeFinder
 	) {
 		if (!is_dir($this->descriptorPath)) mkdir($this->descriptorPath);
 	}
