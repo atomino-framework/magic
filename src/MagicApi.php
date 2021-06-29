@@ -16,14 +16,13 @@ abstract class MagicApi extends Api {
 
 	private string $entity;
 	public function __construct(private SessionAuthenticator $sessionAuthenticator, Authenticator $authenticator) {
-		parent::__construct($authenticator);
 		$this->entity = Magic::get(new \ReflectionClass($this))->entity;
 	}
 	private function getEntity(): string { return $this->entity; }
 
 	protected function getEntityObject($id = null): Entity {
 		if (!is_null($id)) return ($this->getEntity())::pick($id);
-		else return new ($this->getEntity())();
+		else return ($this->getEntity())::create();
 	}
 
 	protected function preprocess($data) { return $data; }
@@ -74,7 +73,7 @@ abstract class MagicApi extends Api {
 	#[Route(Api::GET, '/blank')]
 	#[Auth]
 	public function blank() {
-		$item = new ($this->getEntity())();
+		$item = ($this->getEntity())::create();
 		return $item->export();
 	}
 
@@ -87,7 +86,7 @@ abstract class MagicApi extends Api {
 	#[Route(Api::POST, '/new')]
 	#[Auth]
 	public function create() {
-		return $this->save(new ($this->getEntity())(), $this->data->get('item'));
+		return $this->save(($this->getEntity())::create(), $this->data->get('item'));
 	}
 
 	protected function save($item, $data) {
